@@ -1,0 +1,109 @@
+# SLM Minimal Sufficient Context Pipeline Configuration
+
+# LLM 설정 (Teacher Model)
+teacher:
+  model: "gpt-4o"  # 또는 claude-3-opus, 등
+  api_base: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"  # 환경변수 이름
+  temperature: 0.7
+  max_tokens: 2048
+
+# Answer Model (다운스트림 평가용)
+answer_model:
+  model: "gpt-3.5-turbo"  # 실제 SLM으로 교체 가능
+  api_base: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  temperature: 0.0
+  max_tokens: 512
+
+# Student Model (학습 대상 SLM)
+student:
+  model_name: "Qwen/Qwen2.5-1.5B"
+  tokenizer_name: "Qwen/Qwen2.5-1.5B"
+  max_length: 1024
+
+# Retriever 설정 (선택적)
+retriever:
+  enabled: false
+  type: "bm25"  # bm25 또는 dense
+  index_path: "data/retriever_index"
+  top_k: 5
+
+# 파이프라인 설정
+pipeline:
+  # Planner 설정
+  planner:
+    max_entities: 10
+    max_constraints: 8
+    max_subquestions: 5
+  
+  # Evidence Builder 설정
+  evidence_builder:
+    use_retrieval: false
+    use_generation: true
+    max_evidences: 10
+    pseudo_doc_length: 200
+  
+  # Judge 설정
+  judge:
+    min_information_density: 0.5
+    max_distractor_ratio: 0.3
+    leakage_detection: true
+
+# Context 후보 생성 설정
+candidate_generation:
+  generate_all_types: true
+  context_types:
+    - c_pos    # 압축된 핵심 컨텍스트
+    - c_long   # 장황한 설명형
+    - c_noisy  # 노이즈 섞인 컨텍스트
+    - c_null   # 컨텍스트 없음
+    - c_leaky  # 답 누설 (학습 시 reject용)
+
+# 평가 설정
+evaluation:
+  metrics:
+    - accuracy
+    - answer_probability
+    - calibration
+    - token_efficiency
+  batch_size: 32
+  num_samples_per_question: 3
+
+# 학습 설정
+training:
+  # SFT 설정
+  sft:
+    epochs: 3
+    batch_size: 8
+    learning_rate: 2.0e-5
+    warmup_ratio: 0.1
+    gradient_accumulation_steps: 4
+    save_steps: 500
+    
+  # DPO 설정
+  dpo:
+    epochs: 1
+    batch_size: 4
+    learning_rate: 1.0e-6
+    beta: 0.1  # DPO beta parameter
+    
+  # 공통 설정
+  output_dir: "outputs/models"
+  logging_dir: "outputs/logs"
+  seed: 42
+  fp16: true
+  gradient_checkpointing: true
+
+# 데이터 경로
+data:
+  input_questions: "data/questions.jsonl"
+  teacher_output: "data/teacher_output.jsonl"
+  candidates: "data/candidates.jsonl"
+  labeled: "data/labeled.jsonl"
+  train_dir: "data/train"
+
+# 로깅
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

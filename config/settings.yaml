@@ -1,0 +1,69 @@
+teacher:
+  model: "gpt-4o-mini"
+  api_base: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  temperature: 0.2
+  max_tokens: 1536
+
+answer_model:
+  model: "gpt-4o-mini"
+  api_base: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  temperature: 0.0
+  max_tokens: 256
+
+student:
+  model_name: "Qwen/Qwen2.5-1.5B"
+  tokenizer_name: "Qwen/Qwen2.5-1.5B"
+  max_length: 1024
+
+retriever:
+  enabled: false
+  type: "bm25"
+  index_path: "data/retriever_index"
+  top_k: 5
+
+pipeline:
+  planner:
+    max_entities: 10
+    max_constraints: 8
+    max_subquestions: 5
+  evidence_builder:
+    use_retrieval: false
+    use_generation: true
+    max_evidences: 10
+    pseudo_doc_length: 200
+  judge:
+    min_information_density: 0.3
+    max_distractor_ratio: 0.7
+    leakage_detection: true
+
+candidate_generation:
+  use_llm_variants: false
+  context_types:
+    - c_pos
+    - c_long
+    - c_noisy
+    - c_null
+    - c_leaky
+
+evaluation:
+  backend: "student_hf"
+  max_new_tokens: 128
+  inference_temperature: 0.0
+  fp16: true
+  device_map: "auto"
+  alpha_correct: 2.0
+  alpha_prob: 1.2
+  beta_tokens: 0.0015
+  beta_latency: 0.0008
+
+training:
+  seed: 42
+
+data:
+  input_questions: "data/questions.jsonl"
+  teacher_output: "data/teacher_output.jsonl"
+  candidates: "data/candidates.jsonl"
+  labeled: "data/labeled.jsonl"
+  train_dir: "data/train"

@@ -1,0 +1,10 @@
+{
+  "total_evaluations": 30,
+  "total_questions": 6,
+  "preference_pairs": 23,
+  "helpful_contexts": 5,
+  "questions": 6,
+  "pairs": 23,
+  "leaky_reject_pairs": 6,
+  "need_context_false_candidates": 1
+}

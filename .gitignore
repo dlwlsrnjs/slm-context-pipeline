@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Large datasets / generated data (kept out of git)
+data/run_en_v2/
+data/train_run_en_v2/
+data/math_5k/
+data/math_test/
+data/math_5k_clusters/
+data/korean_audit/
+data/train/
+data/train_real_max/
+data/questions_real_max.jsonl
+data/teacher_output_real_max.jsonl
+
+# Training artifacts / checkpoints
+checkpoints/
+runs/
+outputs/
+logs/
+wandb/
+*.ckpt
+*.pt
+*.bin
+*.safetensors
+
+# Local user config (override of example)
+config/settings.local.yaml
