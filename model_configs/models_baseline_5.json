@@ -1,0 +1,44 @@
+{
+  "models": [
+    {
+      "name": "GPT-Neo-1.3B",
+      "parameters": 1.37,
+      "size": 2.46,
+      "year": "03/2021",
+      "provider": "EleutherAI",
+      "huggingface_url": "https://huggingface.co/EleutherAI/gpt-neo-1.3B"
+    },
+    {
+      "name": "Phi-1.5",
+      "parameters": 2.7,
+      "size": 2.45,
+      "year": "12/2023",
+      "provider": "Microsoft",
+      "huggingface_url": "https://huggingface.co/microsoft/phi-1_5"
+    },
+    {
+      "name": "Qwen2.5-1.5B-Instruct",
+      "parameters": 1.5,
+      "size": 3.0,
+      "year": "09/2024",
+      "provider": "Qwen",
+      "huggingface_url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct"
+    },
+    {
+      "name": "SmolLM2-1.7B-Instruct",
+      "parameters": 1.7,
+      "size": 3.4,
+      "year": "12/2024",
+      "provider": "HuggingFaceTB",
+      "huggingface_url": "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct"
+    },
+    {
+      "name": "Llama-3.2-1B-Instruct",
+      "parameters": 1.0,
+      "size": 2.0,
+      "year": "09/2024",
+      "provider": "Meta",
+      "huggingface_url": "https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "Llama-3.2-1B-Instruct",
+      "parameters": 1.0,
+      "size": 2.0,
+      "year": "09/2024",
+      "provider": "Meta",
+      "huggingface_url": "https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "Phi-1.5",
+      "parameters": 2.7,
+      "size": 2.45,
+      "year": "12/2023",
+      "provider": "Microsoft",
+      "huggingface_url": "https://huggingface.co/microsoft/phi-1_5"
+    }
+  ]
+}

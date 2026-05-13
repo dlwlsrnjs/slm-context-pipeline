@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "GPT-Neo-1.3B",
+      "parameters": 1.37,
+      "size": 2.46,
+      "year": "03/2021",
+      "provider": "EleutherAI",
+      "huggingface_url": "https://huggingface.co/EleutherAI/gpt-neo-1.3B"
+    }
+  ]
+}

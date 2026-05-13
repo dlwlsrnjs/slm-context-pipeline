@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "SmolLM2-1.7B-Instruct",
+      "parameters": 1.7,
+      "size": 3.4,
+      "year": "12/2024",
+      "provider": "HuggingFaceTB",
+      "huggingface_url": "https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "Qwen2.5-1.5B-Instruct",
+      "parameters": 1.5,
+      "size": 3.0,
+      "year": "09/2024",
+      "provider": "Qwen",
+      "huggingface_url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct"
+    }
+  ]
+}
