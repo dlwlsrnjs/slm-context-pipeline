@@ -1,0 +1,62 @@
+===============Example 1===============
+Example Problem: Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?
+
+Example Solution: <reasoning>
+April: 48 clips.
+May: half of April = 48 / 2 = 24 clips.
+Total = 48 + 24 = 72.
+</reasoning>
+<answer>
+72
+</answer>
+
+===============Example 2===============
+Example Problem: A train leaves Station A at 9:00 AM heading east at 60 mph. Another train leaves Station B, which is 300 miles east of Station A, at 10:00 AM heading west at 40 mph. After how many hours from 10:00 AM do the two trains meet?
+
+Example Solution: <reasoning>
+Let t = hours after 10:00 AM until the trains meet.
+By 10:00 AM, Train A has already traveled 60 miles (1 hour at 60 mph).
+Remaining distance between them at 10:00 AM = 300 - 60 = 240 miles.
+After 10:00 AM, they close the gap at 60 + 40 = 100 mph.
+t = 240 / 100 = 2.4 hours.
+</reasoning>
+<answer>
+2.4
+</answer>
+
+===============Example 3===============
+Example Problem: A pizza is cut into 8 equal slices. Tom eats 3 slices, then Jerry eats half of what is left. How many slices remain after Jerry eats?
+
+Example Solution: <reasoning>
+After Tom: 8 - 3 = 5 slices left.
+Jerry eats half of 5 = 2.5, but slices are discrete; assume the problem allows fractional eaten amount.
+Slices remaining = 5 - 2.5 = 2.5.
+</reasoning>
+<answer>
+2.5
+</answer>
+
+===============Example 4===============
+Example Problem: Anna's age is twice Ben's age. In 5 years, the sum of their ages will be 31. How old is Anna now?
+
+Example Solution: <reasoning>
+Let Ben's current age = b, then Anna = 2b.
+In 5 years: (b + 5) + (2b + 5) = 31.
+3b + 10 = 31, so 3b = 21, b = 7.
+Anna's current age = 2 * 7 = 14.
+</reasoning>
+<answer>
+14
+</answer>
+
+===============Example 5===============
+Example Problem: A shop sells pens for $2 each and notebooks for $5 each. Alex buys 4 pens and some notebooks, paying $33 in total. How many notebooks did Alex buy?
+
+Example Solution: <reasoning>
+Cost of pens = 4 * $2 = $8.
+Remaining for notebooks = $33 - $8 = $25.
+Notebooks = $25 / $5 = 5.
+</reasoning>
+<answer>
+5
+</answer>

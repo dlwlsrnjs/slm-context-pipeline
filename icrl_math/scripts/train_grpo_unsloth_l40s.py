@@ -52,7 +52,7 @@ from trl import GRPOConfig, GRPOTrainer  # noqa: E402
 # Prompt & answer format (single-turn, no tool — matches Phase A)
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are a careful step-by-step math reasoner.
+SYSTEM_PROMPT_BASE = """You are a careful step-by-step math reasoner.
 
 Respond in EXACTLY this format and nothing else:
 
@@ -63,6 +63,20 @@ your step-by-step reasoning here
 the final numeric answer here, e.g. 42
 </answer>
 """
+
+
+def build_system_prompt(demos_file=None):
+    """Optionally prepend few-shot demos (ICRL-style) to the system prompt."""
+    if not demos_file:
+        return SYSTEM_PROMPT_BASE
+    from pathlib import Path
+    text = Path(demos_file).read_text(encoding="utf-8").strip()
+    return (
+        SYSTEM_PROMPT_BASE
+        + "\nHere are some worked examples you can refer to:\n\n"
+        + text
+        + "\n\nNow solve the new problem using the same format. Do NOT reuse problems from the examples."
+    )
 
 _HASH_RE = re.compile(r"####\s*(\-?[0-9\.,]+)")
 _ANSWER_RE = re.compile(r"<answer>(.*?)</answer>", re.DOTALL)
@@ -92,8 +106,23 @@ def _completion_text(c):
 # ---------------------------------------------------------------------------
 
 
+_CORRECTNESS_W = 2.0
+_INT_W = 0.5
+_SOFT_FMT_W = 0.5
+_STRICT_FMT_W = 0.5
+
+
+def set_reward_weights(correctness, integer, soft_fmt, strict_fmt):
+    """Override the (otherwise hardcoded) reward weights at runtime."""
+    global _CORRECTNESS_W, _INT_W, _SOFT_FMT_W, _STRICT_FMT_W
+    _CORRECTNESS_W = correctness
+    _INT_W = integer
+    _SOFT_FMT_W = soft_fmt
+    _STRICT_FMT_W = strict_fmt
+
+
 def correctness_reward(prompts, completions, answer, **kw):
-    """+2.0 if predicted answer string-matches gold (after light normalization)."""
+    """correctness weight if predicted answer string-matches gold (after light normalization)."""
     out = []
     for c, gold in zip(completions, answer):
         pred = _extract_xml_answer(_completion_text(c))
@@ -107,24 +136,24 @@ def correctness_reward(prompts, completions, answer, **kw):
                     ok = abs(float(p) - float(g)) < 1e-6
                 except ValueError:
                     pass
-        out.append(2.0 if ok else 0.0)
+        out.append(_CORRECTNESS_W if ok else 0.0)
     return out
 
 
 def int_reward(completions, **kw):
-    """+0.5 if extracted answer parses as an integer (encourages clean numeric output)."""
-    return [0.5 if _extract_xml_answer(_completion_text(c)).replace("-", "").isdigit() else 0.0
+    """int_weight if extracted answer parses as an integer (encourages clean numeric output)."""
+    return [_INT_W if _extract_xml_answer(_completion_text(c)).replace("-", "").isdigit() else 0.0
             for c in completions]
 
 
 def soft_format_reward(completions, **kw):
-    """+0.5 if response contains <reasoning>...</reasoning><answer>...</answer> somewhere."""
-    return [0.5 if _REASONING_RE.search(_completion_text(c)) else 0.0 for c in completions]
+    """soft_fmt weight if response contains <reasoning>...</reasoning><answer>...</answer> somewhere."""
+    return [_SOFT_FMT_W if _REASONING_RE.search(_completion_text(c)) else 0.0 for c in completions]
 
 
 def strict_format_reward(completions, **kw):
-    """+0.5 if response matches the strict newline-delimited template exactly."""
-    return [0.5 if _STRICT_RE.match(_completion_text(c)) else 0.0 for c in completions]
+    """strict_fmt weight if response matches the strict newline-delimited template exactly."""
+    return [_STRICT_FMT_W if _STRICT_RE.match(_completion_text(c)) else 0.0 for c in completions]
 
 
 # ---------------------------------------------------------------------------
@@ -132,13 +161,13 @@ def strict_format_reward(completions, **kw):
 # ---------------------------------------------------------------------------
 
 
-def build_dataset(split):
+def build_dataset(split, system_prompt):
     ds = load_dataset("openai/gsm8k", "main")[split]
 
     def convert(x):
         return {
             "prompt": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": x["question"]},
             ],
             "answer": _extract_hash_answer(x["answer"]),
@@ -182,6 +211,16 @@ def main():
     p.add_argument("--smoke", action="store_true",
                    help="set max_steps=2, save_steps=2, train_data_num=8 for a fast OOM check")
 
+    # ICRL-style few-shot demos in the system prompt
+    p.add_argument("--demos-file", default=None,
+                   help="path to a math_examples.txt; if set, demos are prepended to system prompt")
+
+    # Reward weights (rebalanced in Phase B to lean on correctness)
+    p.add_argument("--correctness-weight", type=float, default=2.0)
+    p.add_argument("--int-weight", type=float, default=0.5)
+    p.add_argument("--soft-format-weight", type=float, default=0.5)
+    p.add_argument("--strict-format-weight", type=float, default=0.5)
+
     args = p.parse_args()
 
     if args.smoke:
@@ -202,6 +241,19 @@ def main():
     print(f"[boot] LoRA rank={args.lora_rank} targets={target_modules}")
     print(f"[boot] GRPO num_gen={args.num_generations} batch={args.per_device_batch} accum={args.grad_accum} "
           f"steps={args.max_steps}")
+    print(f"[boot] demos_file={args.demos_file}")
+    print(f"[boot] reward weights: correctness={args.correctness_weight} int={args.int_weight} "
+          f"soft_fmt={args.soft_format_weight} strict_fmt={args.strict_format_weight}")
+
+    # Install reward weights and (optionally) demos into the system prompt.
+    set_reward_weights(
+        args.correctness_weight,
+        args.int_weight,
+        args.soft_format_weight,
+        args.strict_format_weight,
+    )
+    system_prompt = build_system_prompt(args.demos_file)
+    print(f"[boot] system_prompt len = {len(system_prompt)} chars")
 
     # 1) load 4bit model + vLLM rollout
     model, tokenizer = FastLanguageModel.from_pretrained(
@@ -224,7 +276,7 @@ def main():
     )
 
     # 3) data
-    dataset = build_dataset("train")
+    dataset = build_dataset("train", system_prompt)
     if args.smoke:
         dataset = dataset.select(range(min(8, len(dataset))))
 

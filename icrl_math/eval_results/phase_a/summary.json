@@ -1,0 +1,10 @@
+{
+  "n": 100,
+  "baseline_em": 0.47,
+  "baseline_correct": 47,
+  "lora_em": 0.44,
+  "lora_correct": 44,
+  "delta": -0.02999999999999997,
+  "model": "unsloth/Qwen2.5-3B-Instruct-bnb-4bit",
+  "lora": "/home/jklee/ondevice/slm-context-pipeline/icrl_math/checkpoints/grpo_l40s_full/lora_final"
+}

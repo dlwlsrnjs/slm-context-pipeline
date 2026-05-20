@@ -1,0 +1,27 @@
+{
+  "n": 100,
+  "results": {
+    "baseline_base": {
+      "em": 0.5,
+      "correct": 50
+    },
+    "baseline_demos": {
+      "em": 0.78,
+      "correct": 78
+    },
+    "phase_a": {
+      "em": 0.56,
+      "correct": 56
+    },
+    "phase_b": {
+      "em": 0.76,
+      "correct": 76
+    }
+  },
+  "deltas": {
+    "phase_a_vs_baseline_base": 0.06000000000000005,
+    "demo_only_effect": 0.28,
+    "phase_b_grpo_on_top": -0.020000000000000018,
+    "phase_b_total": 0.26
+  }
+}
