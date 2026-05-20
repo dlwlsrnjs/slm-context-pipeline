@@ -1,0 +1,97 @@
+===============Example 1===============
+Example Problem: A train leaves Station A at 9:00 AM heading east at 60 mph. Another train leaves Station B, which is 300 miles east of Station A, at 10:00 AM heading west at 40 mph. At what time do the two trains meet? Express your answer as a time in HH:MM AM/PM format.
+
+Example Solution: <think> Let t be the number of hours after 9:00 AM. Train A travels 60t miles east. Train B starts 1 hour later, so it travels 40(t-1) miles west, valid only for t >= 1. They meet when the sum of distances equals 300: 60t + 40(t-1) = 300. I'll solve this with sympy and convert the result to a clock time. </think>
+<search>
+from sympy import symbols, Eq, solve
+t = symbols('t', positive=True)
+sol = solve(Eq(60*t + 40*(t-1), 300), t)[0]
+hours = int(sol)
+minutes = int((sol - hours) * 60)
+total_min = 9*60 + hours*60 + minutes
+hh = (total_min // 60) % 12 or 12
+mm = total_min % 60
+ampm = "AM" if (total_min // 60) % 24 < 12 else "PM"
+print(f"t = {sol} hours = {hours}h {minutes}min after 9:00 AM")
+print(f"meeting time: {hh:02d}:{mm:02d} {ampm}")
+</search>
+<information>
+t = 17/5 hours = 3h 24min after 9:00 AM
+meeting time: 12:24 PM
+</information>
+<think> The trains meet 3 hours and 24 minutes after 9:00 AM, which is 12:24 PM. </think>
+<answer> \boxed{12:24 \text{ PM}} </answer>
+
+===============Example 2===============
+Example Problem: What is the greatest common divisor of 252 and 105?
+
+Example Solution: <think> The GCD can be computed via the Euclidean algorithm. To avoid arithmetic slips I'll just call math.gcd. </think>
+<search>
+from math import gcd
+print(gcd(252, 105))
+</search>
+<information>
+21
+</information>
+<think> So gcd(252, 105) = 21. Sanity check: 252 = 12 * 21 and 105 = 5 * 21, and gcd(12, 5) = 1, confirming 21 is greatest. </think>
+<answer> \boxed{21} </answer>
+
+===============Example 3===============
+Example Problem: A circle is inscribed in a square with side length 10. What is the area of the region that lies inside the square but outside the circle? Express your answer in terms of pi.
+
+Example Solution: <think> An inscribed circle in a square of side s has radius s/2. Here s=10 so r=5. The desired area is s^2 - pi*r^2 = 100 - 25*pi. Let me verify symbolically. </think>
+<search>
+from sympy import pi, simplify
+s, r = 10, 5
+print(simplify(s**2 - pi*r**2))
+</search>
+<information>
+100 - 25*pi
+</information>
+<think> The area inside the square but outside the inscribed circle is 100 - 25*pi. </think>
+<answer> \boxed{100 - 25\pi} </answer>
+
+===============Example 4===============
+Example Problem: How many distinct arrangements are there of the letters in the word "MATHEMATICS"?
+
+Example Solution: <think> MATHEMATICS has 11 letters with M=2, A=2, T=2, and each of H, E, I, C, S appearing once. The number of distinct arrangements is 11!/(2!*2!*2!). I'll compute it. </think>
+<search>
+from math import factorial
+from collections import Counter
+word = "MATHEMATICS"
+counts = Counter(word)
+print("counts:", dict(counts))
+num = factorial(len(word))
+den = 1
+for c in counts.values():
+    den *= factorial(c)
+print("answer:", num // den)
+</search>
+<information>
+counts: {'M': 2, 'A': 2, 'T': 2, 'H': 1, 'E': 1, 'I': 1, 'C': 1, 'S': 1}
+answer: 4989600
+</information>
+<think> There are 4,989,600 distinct arrangements. </think>
+<answer> \boxed{4989600} </answer>
+
+===============Example 5===============
+Example Problem: Find the minimum value of the function f(x) = x^2 + 1/x for x > 0.
+
+Example Solution: <think> For x > 0, I'll find where f'(x) = 0. f'(x) = 2x - 1/x^2 = 0 gives 2x^3 = 1, so x* = (1/2)^(1/3) = 2^(-1/3). Then f(x*) = (x*)^2 + 1/x* = 2^(-2/3) + 2^(1/3) = 2^(-2/3) * (1 + 2) = 3 * 2^(-2/3) = 3 * cbrt(2) / 2. Let me verify symbolically. </think>
+<search>
+from sympy import symbols, diff, solve, simplify, Rational, cbrt
+x = symbols('x', positive=True)
+f = x**2 + 1/x
+xstar = solve(diff(f, x), x)[0]
+fmin = simplify(f.subs(x, xstar))
+print("x* =", xstar)
+print("f(x*) =", fmin)
+print("simplified =", simplify(fmin - 3*cbrt(2)/2))
+</search>
+<information>
+x* = 2**(-1/3)
+f(x*) = 3*2**(1/3)/2
+simplified = 0
+</information>
+<think> The symbolic minimum is 3 * cbrt(2) / 2. </think>
+<answer> \boxed{\dfrac{3\sqrt[3]{2}}{2}} </answer>

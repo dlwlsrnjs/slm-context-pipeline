@@ -11,6 +11,8 @@
 - 길고 똑똑한 배경설명이 아니라, **짧고 구조화되어 있고 노이즈가 적은** 작업용 입력
 
 > 실험을 어떻게 진행했는지 한 문서로 보고 싶다면 → **[EXPERIMENTS.md](EXPERIMENTS.md)** (데이터 빌드 → SFT → DPO → GRPO(RL) → 평가 5단계 + RL v1~v5 비교 + end-to-end 재현 시퀀스)
+>
+> 새로 시작한 RL-only 라인은 → **[icrl_math/README.md](icrl_math/README.md)** (ICRL을 Qwen2.5-3B 수학 추론에 그대로 적용, teacher distill 비용 0)
 
 ## 아키텍처
 

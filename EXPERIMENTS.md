@@ -234,3 +234,80 @@ python scripts/eval_math_icl_baselines.py --judge-model Qwen/Qwen2.5-7B-Instruct
 ```
 
 > 대용량 결과/체크포인트는 git에서 제외되어 있습니다. (`experiment_results/`, `checkpoints/`, `data/run_en_v2/` 등)
+
+---
+
+## 10. 새 연구 라인 — ICRL-Math (`icrl_math/`)
+
+위 1~9의 SFT+DPO+GRPO 파이프라인은 teacher distillation 비용/복잡도가 크고, 데이터 손실에 취약합니다 (실제로 한 번 잃었습니다). 이를 대체하는 **새 연구 라인** `icrl_math/` 가 추가됐습니다.
+
+**핵심 아이디어:** ICRL (Ye, Zhao et al., 2026)의 RL-only + few-shot curriculum 방식을 거의 그대로 차용하되, 도메인을 **수학 추론 + Python 도구**, 타깃을 **Qwen2.5-3B-Instruct SLM**, demo 풀을 (향후) Auto-CoT 클러스터로 다양화.
+
+### 흐름
+
+```
+HF raw (GSM8K / MATH)  ──>  3-shot / 2-shot / 0-shot parquet
+                                       │
+                                       ▼
+                       GRPO 학습 (verl, ICRL infra)
+                       │  rollout: <think>·<search Python>·<information stdout>·<answer>
+                       │  reward: 0.8·boxed-EM + 0.2·format
+                       │  loss mask: <information> 토큰 제외 (ICRL 그대로)
+                       ▼
+              Stage 1 (3-shot) → Stage 2 (2-shot) → Stage 3 (0-shot)
+                                       │   (1-shot은 ICRL ablation 따라 건너뜀)
+                                       ▼
+                eval: GSM8K · MATH500 · AIME2024 · AIME2025
+```
+
+### 우리가 새로 작성한 부분 (작음)
+
+| 파일 | 역할 |
+|---|---|
+| `icrl_math/example/math_examples.txt` | 5개 demo (algebra, gcd, 기하, 조합, 미분) |
+| `icrl_math/scripts/data_process/math_fewshot.py` | HF GSM8K/MATH → parquet, N-shot 선택 |
+| `icrl_math/sandbox/python_sandbox_server.py` | FastAPI 코드 실행기, ICRL retriever URL 자리에 plug |
+| `icrl_math/verl_patches/math_fewshot.py` | boxed-EM + 포맷 페널티 reward (sympy/string-equiv 다중 fallback) |
+| `icrl_math/install_into_icrl.sh` | ICRL repo에 reward 복사 + `main_ppo_fewshot._select_rm_score_fn` 1줄 패치 |
+| `icrl_math/train_curriculum_math.sh` | Stage 1→2→3 (3B용 메모리 튜닝) |
+| `icrl_math/scripts/eval_math.py` | vLLM 기반 standalone eval (tool loop 포함) |
+
+### 이전 작업(섹션 1~7)과의 관계
+
+| 구분 | 이전 (slm_context_pipeline) | 새 (icrl_math) |
+|---|---|---|
+| 도메인 | Q → C* context 압축 | 수학 추론 + Python tool |
+| 학습 | SFT → DPO → GRPO (3단계) | **GRPO 단일 단계** (curriculum 안에서) |
+| Teacher API | gpt-4o-mini 수천 콜 | **없음** (사람이 작성한 demo 5개) |
+| 학습 데이터 | teacher labeled jsonl (잃어버림) | **HF raw GSM8K/MATH** (재다운로드 free) |
+| 자산 재활용 | — | `scripts/build_autocot_clusters.py` (향후 cluster-adaptive demos) |
+
+### 실행 시퀀스 (요약)
+
+```bash
+# 1. ICRL clone + 환경
+git clone https://github.com/applese233/ICRL.git /home/jklee/ondevice/ICRL
+conda env create -f /home/jklee/ondevice/ICRL/environment.yml && conda activate icrl
+
+# 2. 패치 설치 (idempotent)
+ICRL_DIR=/home/jklee/ondevice/ICRL bash icrl_math/install_into_icrl.sh
+
+# 3. sandbox 띄우기
+python icrl_math/sandbox/python_sandbox_server.py --port 8000 --timeout 5 &
+
+# 4. parquet 준비
+python icrl_math/scripts/data_process/math_fewshot.py --dataset math --num_examples 3 --local_dir icrl_math/data/math_3shot
+python icrl_math/scripts/data_process/math_fewshot.py --dataset math --num_examples 2 --local_dir icrl_math/data/math_2shot
+python icrl_math/scripts/data_process/math_fewshot.py --dataset math --template_type zeroshot --local_dir icrl_math/data/math_0shot
+
+# 5. curriculum 학습
+CUDA_VISIBLE_DEVICES=0,1,2,3 ICRL_DIR=/home/jklee/ondevice/ICRL bash icrl_math/train_curriculum_math.sh
+
+# 6. 평가
+python icrl_math/scripts/eval_math.py \
+    --model-path icrl_math/checkpoints/icrl-math-stage3-0shot-qwen2.5-3b/actor/global_step_100/hf \
+    --datasets gsm8k math500 aime2024 aime2025 \
+    --num-shots 0
+```
+
+자세한 설명은 [`icrl_math/README.md`](icrl_math/README.md).
