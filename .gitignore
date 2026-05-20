@@ -58,3 +58,9 @@ wandb/
 
 # Local user config (override of example)
 config/settings.local.yaml
+
+# venv-local runtime artifacts
+icrl_math/.hf-cache/
+icrl_math/unsloth_compiled_cache/
+unsloth_compiled_cache/
+icrl_math/checkpoints/

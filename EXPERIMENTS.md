@@ -311,3 +311,23 @@ python icrl_math/scripts/eval_math.py \
 ```
 
 자세한 설명은 [`icrl_math/README.md`](icrl_math/README.md).
+
+### Phase A (Unsloth 단일 L40S)
+
+ICRL의 verl/FSDP 인프라는 4×A100 80GB 이상을 가정합니다. 우리 환경(L40S 40GB)에선 Unsloth 단일 GPU로 먼저 안정화하고 점진적으로 키웁니다.
+
+```bash
+cd icrl_math
+bash setup_venv.sh                  # torch 2.5.1 + cu124 + unsloth + trl + vllm 0.7.x
+GPU=0 bash run_phase_a.sh smoke     # 2-step OOM probe
+GPU=0 bash run_phase_a.sh full      # 300 steps
+```
+
+**환경 셋업 중 발견한 함정 (모두 setup_venv.sh / run_phase_a.sh 에 박혀있음):**
+
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| `peft 0.19` 가 torch ≥ 2.11 요구 | 새 peft가 cpp ext rebuild | `peft<0.17` 핀 |
+| `torchao 0.17` 가 `torch.int1` dtype 요구 | torch 2.5/2.6엔 없음 | `torchao<0.10` 다운그레이드 |
+| `AutoConfig` `PermissionError on .locks` | `~/.cache/huggingface/hub/.locks/` 가 prior Docker root-소유 | `HF_HOME=icrl_math/.hf-cache` 격리 |
+| `vLLM standby + cudagraph capture` 가 `CUDACachingAllocator` INTERNAL ASSERT | unsloth STANDBY=1 + vLLM v1/v0 graph capture 충돌 | `UNSLOTH_VLLM_STANDBY=0` + `gpu_memory_utilization=0.45` |

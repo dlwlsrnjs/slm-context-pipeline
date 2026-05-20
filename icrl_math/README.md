@@ -1,5 +1,24 @@
 # ICRL-Math: In-Context RL for Math Reasoning at SLM Scale
 
+## Two training tracks
+
+This repo ships **two** GRPO trainers, picked based on your GPU budget:
+
+| Track | Script | Hardware | Use when |
+|---|---|---|---|
+| **A. Unsloth single-GPU** | `scripts/train_grpo_unsloth_l40s.py` (driven by `run_phase_a.sh`) | **1× L40S 40GB** or any 24-48GB card | Quick iteration. Loads 3B in 4-bit, LoRA r=8 on q/v, vLLM rollout, num_generations=2. No tool use, no curriculum — single-turn `<reasoning>/<answer>` GRPO on GSM8K. **Run this first.** |
+| **B. verl multi-GPU + curriculum + tool** | `train_curriculum_math.sh` (verl) | 4× A100/A6000 80GB | Full ICRL replication: 3→2→0-shot curriculum, sandboxed Python tool, FSDP, MATH/GSM8K mixed. |
+
+Phase plan (only progress when previous phase converges):
+
+> **Phase A** (Unsloth, this script) — prove the GRPO loop runs at all on our hardware.
+> **Phase B** — keep Unsloth + prepend our 5 math demos in the system prompt (still no tool).
+> **Phase C** — move to verl/FSDP on 4+ GPUs, add curriculum + Python sandbox.
+> **Phase D** — scale to 7B / longer context / cluster-adaptive demos.
+
+---
+
+
 > Apply ICRL (Ye, Zhao et al., 2026) **almost verbatim** to mathematical reasoning,
 > targeting **Qwen2.5-3B-Instruct** — the smallest scale ICRL hasn't been
 > validated on — and replacing the search retriever with a sandboxed
@@ -51,7 +70,29 @@ The system prompt explicitly tells the model that `<search>` invokes a Python
 interpreter. Loss masking on `<information>` content is already implemented in
 ICRL's trainer — we get it for free.
 
-## Setup
+## Quick start — Phase A (Unsloth, single L40S)
+
+```bash
+cd icrl_math
+
+# (1) one-shot venv setup; ~10 min
+bash setup_venv.sh
+
+# (2) smoke test on whichever GPU is free (default 0)
+GPU=0 bash run_phase_a.sh smoke      # ~3-5 min, 2 steps
+
+# (3) full run (300 steps)
+GPU=0 bash run_phase_a.sh full
+```
+
+**Environment notes worth knowing** (lessons from setup):
+
+- `setup_venv.sh` builds `/home/jklee/ondevice/.venv-icrl-math` with **torch 2.5.1 + cu124**, not 2.6 — Unsloth's pinned `torchao>=0.13` requires torch ≥ 2.5 but the `torchao` 0.17 line breaks (uses `torch.int1` dtype only on torch 2.7+). We pin `torchao<0.10` to keep this consistent.
+- `peft<0.17` is enforced (newer peft demands torch ≥ 2.11).
+- HF cache is **isolated to `icrl_math/.hf-cache/`** via `HF_HOME` inside `run_phase_a.sh`. The default `~/.cache/huggingface/hub/.locks/` may be owned by `root` (from prior Docker containers) and would deny lock writes to your user.
+- The smoke mode pins to `unsloth/Qwen2.5-3B-Instruct-bnb-4bit`; if that prequantized repo isn't recognized in your unsloth_zoo build, fall back to `--model Qwen/Qwen2.5-3B-Instruct` (Unsloth bnb-quantizes it on the fly).
+
+## Phase C / D setup (verl multi-GPU + tool use)
 
 1. **Clone ICRL** (the upstream framework, untouched except for our small patch):
    ```bash
