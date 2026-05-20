@@ -327,7 +327,10 @@ GPU=0 bash run_phase_a.sh full      # 300 steps
 
 | 문제 | 원인 | 해결 |
 |---|---|---|
-| `peft 0.19` 가 torch ≥ 2.11 요구 | 새 peft가 cpp ext rebuild | `peft<0.17` 핀 |
-| `torchao 0.17` 가 `torch.int1` dtype 요구 | torch 2.5/2.6엔 없음 | `torchao<0.10` 다운그레이드 |
+| `torchao 0.17` 가 `torch.int1` dtype 요구 | torch 2.5/2.6 에 없음 → 0.9로 다운그레이드 하면 unsloth_zoo (≥0.16 요구)가 거부 | **torch 2.7.1+cu126 wheel** 사용 (cu126 wheel은 driver 12.4에서 minor forward compat로 정상 동작) |
 | `AutoConfig` `PermissionError on .locks` | `~/.cache/huggingface/hub/.locks/` 가 prior Docker root-소유 | `HF_HOME=icrl_math/.hf-cache` 격리 |
-| `vLLM standby + cudagraph capture` 가 `CUDACachingAllocator` INTERNAL ASSERT | unsloth STANDBY=1 + vLLM v1/v0 graph capture 충돌 | `UNSLOTH_VLLM_STANDBY=0` + `gpu_memory_utilization=0.45` |
+| `vLLM standby + cudagraph capture` 가 `CUDACachingAllocator` INTERNAL ASSERT | unsloth STANDBY=1 + vLLM graph capture 충돌 | `UNSLOTH_VLLM_STANDBY=0` + `gpu_memory_utilization=0.45` |
+| `transformers 5.5` 가 `vision_config` dataclass 필드 순서 버그로 GRPOTrainer import 깨짐 | trl 0.24와 호환 안 됨 | `transformers>=4.55,<5.0` 핀 (실제 4.57.6) |
+| `vLLM 0.9 v1 engine` 의 `full_cuda_graph=True` 가 FA3 없는 환경에서 `"AoT scheduling is required"` | unsloth가 fast_inference에서 full_cuda_graph 강제, 우리 머신은 FA2 broken → xformers fallback (FA3 없음) | `VLLM_USE_V1=0` 으로 v0 engine 강제 |
+
+**검증**: smoke test (Qwen2.5-3B-bnb-4bit, GSM8K 8샘플, num_generations=2, GPU 0 L40S) — 2 step 완주 57초, `train_loss=0.0008`, step 2에서 첫 format reward 신호 (`soft_format=strict_format=0.125`) 발견.

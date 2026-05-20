@@ -87,9 +87,9 @@ GPU=0 bash run_phase_a.sh full
 
 **Environment notes worth knowing** (lessons from setup):
 
-- `setup_venv.sh` builds `/home/jklee/ondevice/.venv-icrl-math` with **torch 2.5.1 + cu124**, not 2.6 — Unsloth's pinned `torchao>=0.13` requires torch ≥ 2.5 but the `torchao` 0.17 line breaks (uses `torch.int1` dtype only on torch 2.7+). We pin `torchao<0.10` to keep this consistent.
-- `peft<0.17` is enforced (newer peft demands torch ≥ 2.11).
+- `setup_venv.sh` builds `/home/jklee/ondevice/.venv-icrl-math-v2` with **torch 2.7.1 + cu126 wheel**, vLLM 0.9.x, Unsloth latest (which pulls `torchao>=0.16`). cu126 binaries work on L40S even when the host CUDA driver is 12.4, because minor CUDA forward compatibility holds — what matters is that torch 2.7 introduces the `torch.int{1..7}` / `uint{1..7}` dtypes that `torchao>=0.10` references at module-import time. (An earlier `.venv-icrl-math` on torch 2.5 cu124 deadlocked here: torchao 0.17 broke on missing dtypes, and 0.9 was rejected by unsloth_zoo's pin.)
 - HF cache is **isolated to `icrl_math/.hf-cache/`** via `HF_HOME` inside `run_phase_a.sh`. The default `~/.cache/huggingface/hub/.locks/` may be owned by `root` (from prior Docker containers) and would deny lock writes to your user.
+- `UNSLOTH_VLLM_STANDBY=0` is forced by `run_phase_a.sh` — STANDBY=1 triggers a CUDA caching allocator `INTERNAL ASSERT` during vLLM cudagraph capture on L40S.
 - The smoke mode pins to `unsloth/Qwen2.5-3B-Instruct-bnb-4bit`; if that prequantized repo isn't recognized in your unsloth_zoo build, fall back to `--model Qwen/Qwen2.5-3B-Instruct` (Unsloth bnb-quantizes it on the fly).
 
 ## Phase C / D setup (verl multi-GPU + tool use)

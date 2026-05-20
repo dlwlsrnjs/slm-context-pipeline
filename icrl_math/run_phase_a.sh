@@ -10,8 +10,8 @@
 set -e
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VENV="${VENV:-/home/jklee/ondevice/.venv-icrl-math}"
-GPU="${GPU:-1}"
+VENV="${VENV:-/home/jklee/ondevice/.venv-icrl-math-v2}"
+GPU="${GPU:-0}"
 MODE="${1:-smoke}"
 
 if [ ! -x "$VENV/bin/python" ]; then
@@ -26,6 +26,13 @@ export CUDA_VISIBLE_DEVICES="$GPU"
 # internal assertion on L40S, and expandable_segments interacts badly with
 # vLLM cudagraph in the same way.
 export UNSLOTH_VLLM_STANDBY="${UNSLOTH_VLLM_STANDBY:-0}"
+# vLLM 0.9+ v1 engine defaults to FlashAttention-3's AoT schedule for full
+# cudagraph. Our box has no FA3 (FA2 is also broken, falls back to xformers),
+# so v1 + Unsloth's full_cuda_graph=True raises:
+#   "AoT scheduling is required for full cuda graph."
+# Forcing the v0 engine restores the classic cudagraph path that xformers
+# supports.
+export VLLM_USE_V1="${VLLM_USE_V1:-0}"
 # Use a dedicated HF cache to avoid permission clashes with root-owned
 # ~/.cache/huggingface/hub/.locks (left over from prior Docker containers).
 export HF_HOME="${HF_HOME:-$HERE/.hf-cache}"
