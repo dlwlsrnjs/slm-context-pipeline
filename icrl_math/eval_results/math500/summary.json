@@ -1,0 +1,37 @@
+{
+  "n": 100,
+  "results": {
+    "baseline_base": {
+      "em": 0.39,
+      "correct": 39
+    },
+    "baseline_demos": {
+      "em": 0.44,
+      "correct": 44
+    },
+    "phase_a__base": {
+      "em": 0.36,
+      "correct": 36
+    },
+    "phase_a__demos": {
+      "em": 0.43,
+      "correct": 43
+    },
+    "phase_b__base": {
+      "em": 0.37,
+      "correct": 37
+    },
+    "phase_b__demos": {
+      "em": 0.45,
+      "correct": 45
+    },
+    "phase_c__base": {
+      "em": 0.35,
+      "correct": 35
+    },
+    "phase_c__demos": {
+      "em": 0.44,
+      "correct": 44
+    }
+  }
+}

@@ -215,6 +215,11 @@ def main():
     p.add_argument("--demos-file", default=None,
                    help="path to a math_examples.txt; if set, demos are prepended to system prompt")
 
+    # Resume LoRA from a previously saved adapter (for curriculum stages)
+    p.add_argument("--resume-from-lora", default=None,
+                   help="path to a previously saved LoRA adapter directory; if set, train continues "
+                        "from those weights instead of fresh random LoRA init")
+
     # Reward weights (rebalanced in Phase B to lean on correctness)
     p.add_argument("--correctness-weight", type=float, default=2.0)
     p.add_argument("--int-weight", type=float, default=0.5)
@@ -265,7 +270,7 @@ def main():
         gpu_memory_utilization=args.gpu_mem_util,
     )
 
-    # 2) LoRA
+    # 2) LoRA — fresh or resumed
     model = FastLanguageModel.get_peft_model(
         model,
         r=args.lora_rank,
@@ -274,6 +279,33 @@ def main():
         use_gradient_checkpointing="unsloth",
         random_state=args.seed,
     )
+
+    if args.resume_from_lora:
+        from safetensors.torch import load_file
+        from pathlib import Path as _P
+        adapter_path = _P(args.resume_from_lora) / "adapter_model.safetensors"
+        if not adapter_path.exists():
+            raise FileNotFoundError(f"adapter weights not found: {adapter_path}")
+        print(f"[boot] resuming LoRA weights from {adapter_path}")
+        prev = load_file(str(adapter_path))
+        # Map saved keys (peft format: "base_model.model.<...>.lora_A.weight") onto our
+        # fresh LoRA's parameters. Unsloth's get_peft_model wraps params the same way.
+        own = {k: v for k, v in model.named_parameters() if "lora_" in k}
+        n_match = 0
+        for k, v in prev.items():
+            # PEFT saves "...lora_A.weight" but the runtime LoRA names include the
+            # adapter id: "...lora_A.default.weight". Try both, then the bare key.
+            candidates = [k.replace(".weight", ".default.weight"), k]
+            for ck in candidates:
+                if ck in own:
+                    own[ck].data.copy_(v.to(own[ck].device, dtype=own[ck].dtype))
+                    n_match += 1
+                    break
+        print(f"[boot] copied {n_match}/{len(prev)} adapter tensors into the fresh LoRA")
+        if n_match == 0:
+            print("[boot] WARNING: 0 matches. saved keys sample:", list(prev.keys())[:3])
+            print("[boot] own keys sample:", list(own.keys())[:3])
+            raise RuntimeError("LoRA resume failed: no key overlap")
 
     # 3) data
     dataset = build_dataset("train", system_prompt)

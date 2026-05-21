@@ -64,3 +64,4 @@ icrl_math/.hf-cache/
 icrl_math/unsloth_compiled_cache/
 unsloth_compiled_cache/
 icrl_math/checkpoints/
+grpo_trainer_lora_model_*/

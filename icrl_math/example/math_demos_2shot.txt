@@ -1,0 +1,24 @@
+===============Example 1===============
+Example Problem: Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?
+
+Example Solution: <reasoning>
+April: 48 clips.
+May: half of April = 48 / 2 = 24 clips.
+Total = 48 + 24 = 72.
+</reasoning>
+<answer>
+72
+</answer>
+
+===============Example 2===============
+Example Problem: Anna's age is twice Ben's age. In 5 years, the sum of their ages will be 31. How old is Anna now?
+
+Example Solution: <reasoning>
+Let Ben's current age = b, then Anna = 2b.
+In 5 years: (b + 5) + (2b + 5) = 31.
+3b + 10 = 31, so 3b = 21, b = 7.
+Anna's current age = 2 * 7 = 14.
+</reasoning>
+<answer>
+14
+</answer>

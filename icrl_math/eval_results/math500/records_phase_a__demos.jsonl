@@ -1,0 +1,100 @@
+{"gold": "\\left( 3, \\frac{\\pi}{2} \\right)", "pred": "2", "ok": false, "subject": "Precalculus"}
+{"gold": "p - q", "pred": "p-q", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "\\frac{14}{3}", "pred": "3", "ok": false, "subject": "Algebra"}
+{"gold": "9", "pred": "9", "ok": true, "subject": "Number Theory"}
+{"gold": "\\text{Evelyn}", "pred": "Evelyn,Debra,andAngela", "ok": false, "subject": "Algebra"}
+{"gold": "42", "pred": "42", "ok": true, "subject": "Prealgebra"}
+{"gold": "27", "pred": "27", "ok": true, "subject": "Number Theory"}
+{"gold": "90^\\circ", "pred": "1", "ok": false, "subject": "Precalculus"}
+{"gold": "3\\sqrt{13}", "pred": "13", "ok": false, "subject": "Algebra"}
+{"gold": "4", "pred": "1", "ok": false, "subject": "Prealgebra"}
+{"gold": "2220", "pred": "2220", "ok": true, "subject": "Number Theory"}
+{"gold": "\\frac{3}{56}", "pred": "63", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "284", "pred": "440", "ok": false, "subject": "Number Theory"}
+{"gold": "5", "pred": "5", "ok": true, "subject": "Geometry"}
+{"gold": "\\sqrt{51}", "pred": "10", "ok": false, "subject": "Precalculus"}
+{"gold": "6 - 5i", "pred": "5", "ok": false, "subject": "Precalculus"}
+{"gold": "-50", "pred": "-50", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "\\pi", "pred": "-\\pi", "ok": false, "subject": "Precalculus"}
+{"gold": "28", "pred": "28", "ok": true, "subject": "Geometry"}
+{"gold": "3", "pred": "3", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "6+9i", "pred": "9", "ok": false, "subject": "Algebra"}
+{"gold": "13535", "pred": "4", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "5", "pred": "5", "ok": true, "subject": "Algebra"}
+{"gold": "x=5", "pred": "3", "ok": false, "subject": "Algebra"}
+{"gold": "10", "pred": "50", "ok": false, "subject": "Algebra"}
+{"gold": "1,-2", "pred": "2", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "144", "pred": "576", "ok": false, "subject": "Counting & Probability"}
+{"gold": "78", "pred": "78", "ok": true, "subject": "Prealgebra"}
+{"gold": "-2 + 7i", "pred": "7", "ok": false, "subject": "Precalculus"}
+{"gold": "225", "pred": "225", "ok": true, "subject": "Counting & Probability"}
+{"gold": "52_8", "pred": "52", "ok": false, "subject": "Number Theory"}
+{"gold": "11\\sqrt2", "pred": "2", "ok": false, "subject": "Prealgebra"}
+{"gold": "720", "pred": "1440", "ok": false, "subject": "Counting & Probability"}
+{"gold": "\\frac{243}{625}", "pred": "218", "ok": false, "subject": "Algebra"}
+{"gold": "-125", "pred": "125", "ok": false, "subject": "Counting & Probability"}
+{"gold": "3", "pred": "3", "ok": true, "subject": "Number Theory"}
+{"gold": "3, 5, 7", "pred": "7", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "72", "pred": "108", "ok": false, "subject": "Geometry"}
+{"gold": "2000", "pred": "2000", "ok": true, "subject": "Algebra"}
+{"gold": "23", "pred": "143", "ok": false, "subject": "Number Theory"}
+{"gold": "12", "pred": "12", "ok": true, "subject": "Prealgebra"}
+{"gold": "17", "pred": "5", "ok": false, "subject": "Geometry"}
+{"gold": "4", "pred": "4", "ok": true, "subject": "Algebra"}
+{"gold": "70 \\sqrt{2}", "pred": "10", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "1.25", "pred": "1.25", "ok": true, "subject": "Prealgebra"}
+{"gold": "2", "pred": "2", "ok": true, "subject": "Geometry"}
+{"gold": "6", "pred": "3", "ok": false, "subject": "Precalculus"}
+{"gold": "5", "pred": "5", "ok": true, "subject": "Algebra"}
+{"gold": "\\frac{3}{2}", "pred": "2", "ok": false, "subject": "Algebra"}
+{"gold": "83", "pred": "83", "ok": true, "subject": "Prealgebra"}
+{"gold": "203", "pred": "161", "ok": false, "subject": "Number Theory"}
+{"gold": "x^5 - x^4 + x^3 - x^2 + x - 1", "pred": "4", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "12", "pred": "12", "ok": true, "subject": "Prealgebra"}
+{"gold": "-\\frac{\\pi}{6}", "pred": "6", "ok": false, "subject": "Precalculus"}
+{"gold": "0.15", "pred": "0.15", "ok": true, "subject": "Prealgebra"}
+{"gold": "3", "pred": "4", "ok": false, "subject": "Algebra"}
+{"gold": "11", "pred": "11", "ok": true, "subject": "Algebra"}
+{"gold": "16", "pred": "16", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "9901", "pred": "9901", "ok": true, "subject": "Algebra"}
+{"gold": "5", "pred": "5", "ok": true, "subject": "Prealgebra"}
+{"gold": "(6,31,-1)", "pred": "-1", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "-256", "pred": "-256", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "4", "pred": "1", "ok": false, "subject": "Precalculus"}
+{"gold": "10", "pred": "2", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "\\frac{35}{64}", "pred": "-17", "ok": false, "subject": "Precalculus"}
+{"gold": "1", "pred": "1", "ok": true, "subject": "Prealgebra"}
+{"gold": "x^3+3x-6", "pred": "6", "ok": false, "subject": "Algebra"}
+{"gold": "10", "pred": "10", "ok": true, "subject": "Prealgebra"}
+{"gold": "46", "pred": "46", "ok": true, "subject": "Precalculus"}
+{"gold": "-1", "pred": "-1", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "40_9", "pred": "9", "ok": false, "subject": "Number Theory"}
+{"gold": "2516_8", "pred": "557", "ok": false, "subject": "Number Theory"}
+{"gold": "3", "pred": "3", "ok": true, "subject": "Geometry"}
+{"gold": "\\frac{3\\sqrt{3}}{4}", "pred": "4", "ok": false, "subject": "Algebra"}
+{"gold": "\\cot x", "pred": "\\cotx", "ok": true, "subject": "Precalculus"}
+{"gold": "\\frac{11}{36}", "pred": "4", "ok": false, "subject": "Counting & Probability"}
+{"gold": "0", "pred": "0", "ok": true, "subject": "Intermediate Algebra"}
+{"gold": "4", "pred": "4", "ok": true, "subject": "Algebra"}
+{"gold": "(-2,1)", "pred": "-3", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "2", "pred": "2", "ok": true, "subject": "Prealgebra"}
+{"gold": "501", "pred": "2", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "3", "pred": "2", "ok": false, "subject": "Algebra"}
+{"gold": "\\frac{3}{2}", "pred": "3", "ok": false, "subject": "Algebra"}
+{"gold": "2", "pred": "Norealsolution", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "-1", "pred": "-1", "ok": true, "subject": "Algebra"}
+{"gold": "\\sqrt{5}", "pred": "5", "ok": false, "subject": "Geometry"}
+{"gold": "240", "pred": "240", "ok": true, "subject": "Prealgebra"}
+{"gold": "1", "pred": "1", "ok": true, "subject": "Algebra"}
+{"gold": "2", "pred": "2", "ok": true, "subject": "Algebra"}
+{"gold": "21", "pred": "27", "ok": false, "subject": "Number Theory"}
+{"gold": "\\frac{3}{2}", "pred": "2", "ok": false, "subject": "Prealgebra"}
+{"gold": "1", "pred": "1", "ok": true, "subject": "Algebra"}
+{"gold": "\\frac{448}{15625}", "pred": "78125", "ok": false, "subject": "Counting & Probability"}
+{"gold": "33", "pred": "33", "ok": true, "subject": "Algebra"}
+{"gold": "80", "pred": "150", "ok": false, "subject": "Prealgebra"}
+{"gold": "-4", "pred": "-4", "ok": true, "subject": "Precalculus"}
+{"gold": "1 \\pm \\sqrt{19}", "pred": "8", "ok": false, "subject": "Intermediate Algebra"}
+{"gold": "\\text{east}", "pred": "east", "ok": false, "subject": "Prealgebra"}
+{"gold": "2k+2", "pred": "2", "ok": false, "subject": "Prealgebra"}
+{"gold": "\\begin{pmatrix} -1/3 \\\\ 2/3 \\\\ 5/3 \\end{pmatrix}", "pred": "Nosolutionexists.", "ok": false, "subject": "Precalculus"}

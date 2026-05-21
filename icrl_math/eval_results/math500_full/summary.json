@@ -1,0 +1,45 @@
+{
+  "n": 100,
+  "results": {
+    "baseline_base": {
+      "em": 0.39,
+      "correct": 39
+    },
+    "baseline_demos": {
+      "em": 0.44,
+      "correct": 44
+    },
+    "phase_a__base": {
+      "em": 0.36,
+      "correct": 36
+    },
+    "phase_a__demos": {
+      "em": 0.43,
+      "correct": 43
+    },
+    "phase_b__base": {
+      "em": 0.4,
+      "correct": 40
+    },
+    "phase_b__demos": {
+      "em": 0.44,
+      "correct": 44
+    },
+    "phase_c__base": {
+      "em": 0.4,
+      "correct": 40
+    },
+    "phase_c__demos": {
+      "em": 0.47,
+      "correct": 47
+    },
+    "phase_d__base": {
+      "em": 0.39,
+      "correct": 39
+    },
+    "phase_d__demos": {
+      "em": 0.45,
+      "correct": 45
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "n": 100,
+  "results": {
+    "cot_baseline": {
+      "em": 0.76,
+      "correct": 76
+    }
+  }
+}

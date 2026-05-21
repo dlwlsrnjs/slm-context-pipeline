@@ -1,0 +1,45 @@
+{
+  "n": 500,
+  "results": {
+    "baseline_base": {
+      "em": 0.308,
+      "correct": 154
+    },
+    "baseline_demos": {
+      "em": 0.382,
+      "correct": 191
+    },
+    "phase_a__base": {
+      "em": 0.3,
+      "correct": 150
+    },
+    "phase_a__demos": {
+      "em": 0.372,
+      "correct": 186
+    },
+    "phase_b__base": {
+      "em": 0.298,
+      "correct": 149
+    },
+    "phase_b__demos": {
+      "em": 0.396,
+      "correct": 198
+    },
+    "phase_c__base": {
+      "em": 0.33,
+      "correct": 165
+    },
+    "phase_c__demos": {
+      "em": 0.398,
+      "correct": 199
+    },
+    "phase_d__base": {
+      "em": 0.316,
+      "correct": 158
+    },
+    "phase_d__demos": {
+      "em": 0.394,
+      "correct": 197
+    }
+  }
+}

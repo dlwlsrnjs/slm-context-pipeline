@@ -1,0 +1,17 @@
+{
+  "n": 100,
+  "results": {
+    "phase_c_seed1234__base": {
+      "em": 0.82,
+      "correct": 82
+    },
+    "phase_c_seed5678__base": {
+      "em": 0.78,
+      "correct": 78
+    },
+    "phase_c_15b__base": {
+      "em": 0.61,
+      "correct": 61
+    }
+  }
+}

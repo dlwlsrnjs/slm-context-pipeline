@@ -1,0 +1,13 @@
+{
+  "n": 100,
+  "results": {
+    "phase_g": {
+      "em": 0.58,
+      "correct": 58
+    },
+    "phase_h": {
+      "em": 0.52,
+      "correct": 52
+    }
+  }
+}

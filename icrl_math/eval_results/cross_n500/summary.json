@@ -1,0 +1,60 @@
+{
+  "n": 500,
+  "results": {
+    "baseline_base": {
+      "em": 0.486,
+      "correct": 243
+    },
+    "baseline_demos": {
+      "em": 0.8,
+      "correct": 400
+    },
+    "phase_a__base": {
+      "em": 0.51,
+      "correct": 255
+    },
+    "phase_a__demos": {
+      "em": 0.796,
+      "correct": 398
+    },
+    "phase_b__base": {
+      "em": 0.498,
+      "correct": 249
+    },
+    "phase_b__demos": {
+      "em": 0.79,
+      "correct": 395
+    },
+    "phase_c__base": {
+      "em": 0.724,
+      "correct": 362
+    },
+    "phase_c__demos": {
+      "em": 0.804,
+      "correct": 402
+    },
+    "phase_d__base": {
+      "em": 0.508,
+      "correct": 254
+    },
+    "phase_d__demos": {
+      "em": 0.798,
+      "correct": 399
+    },
+    "phase_e__base": {
+      "em": 0.564,
+      "correct": 282
+    },
+    "phase_e__demos": {
+      "em": 0.814,
+      "correct": 407
+    }
+  },
+  "deltas": {
+    "demo_only": 0.31400000000000006,
+    "phase_a_grpo_only": 0.02400000000000002,
+    "phase_a_with_demos_extra": 0.28600000000000003,
+    "phase_b_zero_shot_transfer": 0.01200000000000001,
+    "phase_b_grpo_on_top_of_demos": -0.010000000000000009
+  }
+}
